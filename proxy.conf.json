@@ -1,0 +1,10 @@
+{
+	"/service/students": {
+		"target": "http://localhost:8080",
+		"secure": false
+	},
+	"/service/articles": {
+		"target": "http://localhost:8080",
+		"secure": false
+	}
+}

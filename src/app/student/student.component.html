@@ -1,0 +1,75 @@
+<h3 *ngIf="studentIdToUpdate; else create">
+  Update Student for Id: {{studentIdToUpdate}}
+</h3>
+<ng-template #create>
+  <h3> Create New Student </h3>
+</ng-template>
+<div>
+  <form [formGroup]="studentForm" (ngSubmit)="onStudentFormSubmit()">
+    <table>
+      <tr>
+        <td>Enter Name</td>
+        <td>
+          <input formControlName="name">
+          <label *ngIf="studentForm.get('name').invalid && processValidation" [ngClass]="'error'"> Name is required. </label>
+        </td>
+      </tr>
+      <tr>
+        <td>Enter Passport Number</td>
+        <td>
+          <input formControlName="passportNumber">
+          <label *ngIf="studentForm.get('passportNumber').invalid && processValidation" [ngClass]="'error'"> Passport Number is required. </label>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <button *ngIf="!studentIdToUpdate">CREATE</button>
+          <button *ngIf="studentIdToUpdate">UPDATE</button>
+          <button (click)="backToCreateStudent()" *ngIf="studentIdToUpdate">Go Back</button>
+        </td>
+      </tr>
+    </table>
+  </form>
+  <br/>
+  <div *ngIf="statusCode; else processing">
+    <div *ngIf="statusCode === 201" [ngClass]="'success'">
+      Student added successfully.
+    </div>
+    <div *ngIf="statusCode === 409" [ngClass]="'success'">
+      Student already exists.
+    </div>
+    <div *ngIf="statusCode === 200" [ngClass]="'success'">
+      Student updated successfully.
+    </div>
+    <div *ngIf="statusCode === 204" [ngClass]="'success'">
+      Student deleted successfully.
+    </div>
+    <div *ngIf="statusCode === 500" [ngClass]="'error'">
+      Internal Server Error.
+    </div>
+  </div>
+  <ng-template #processing>
+    <img *ngIf="requestProcessing" src="assets/images/loading.gif">
+  </ng-template>
+</div>
+<h3>Student Details</h3>
+<table>
+  <tr>
+    <th> Id</th>
+    <th>Title</th>
+    <th>Category</th>
+    <th></th>
+    <th></th>
+  </tr>
+  <tr *ngFor="let student of allStudents">
+    <td>{{student.id}}</td>
+    <td>{{student.name}}</td>
+    <td>{{student.passportNumber}}</td>
+    <td>
+      <button type="button" (click)="loadStudentToEdit(student.id)">Edit</button>
+    </td>
+    <td>
+      <button type="button" (click)="deleteStudent(student.id)">Delete</button>
+    </td>
+  </tr>
+</table>
